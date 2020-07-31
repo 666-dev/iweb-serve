@@ -33,8 +33,8 @@ module.exports = router
 router.post('/register', (req, res, next) => {
 	// 1.读取请求数据并进行服务器验证
 	// post请求数据放置在req.body中  
-	let uname = req.body.uname
-	let upwd=req.body.upwd
+	let uname = req.body.uname   //邮箱
+	let upwd=req.body.upwd       //密码
 	if (!uname) {
 		let output = {
 			code: 400,
@@ -43,7 +43,17 @@ router.post('/register', (req, res, next) => {
 		res.send(output)
 		return
 	}
-	// 此处省略了uname的验证格式：必须符合邮箱格式
+	// 验证邮箱格式
+	let regUname=/^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/;
+	if(!regUname.test(uname)){
+			let output={
+				code:407,
+				msg:'uname error'
+			}
+			res.send(output)
+			return
+	}
+	// 电话
 	let phone = req.body.phone
 	if (!phone) {
 		let output = {
@@ -53,7 +63,15 @@ router.post('/register', (req, res, next) => {
 		res.send(output)
 		return
 	}
-	// 此处省略了phone的验证格式  405
+	// 验证phone格式  405
+	let regPhone=/^1[3|4|5|7|8]\d{9}$/;
+	if(!regPhone.test(phone)){
+			let output={
+				code:405,
+				msg:'phone error'
+			}
+			return
+	}
 	//执行captcha验证
 	let captcha=req.body.captcha
 	if(!captcha){
