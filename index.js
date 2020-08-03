@@ -21,18 +21,23 @@ app.use(express.static('./public'))
 		 saveUninitialized:true,   //是否保存未经初始化过的session数据
 		 resave:true,           //是否自动保存session数据--即使没有修改过
 	 }))
+//跨域
+let cors=require('cors')
+app.use(cors({}))
 // 3.申明路由器
 const schoolRouter=require('./router/school.js')
 app.use('/school',schoolRouter)
 
-const systemRouter=require('./router/system.js')
-app.use('/system',systemRouter)
 
 const teacherRouter=require('./router/teacher.js')
 app.use('/teacher',teacherRouter)
 
 const courseRouter=require('./router/course.js')
 app.use('/course',courseRouter)
+
+
+const typeRouter=require('./router/type.js')
+app.use('/type',typeRouter)
 
 const loginCheckMiddleware=require('./middleware/loginCheck')
 app.use('/favorite',loginCheckMiddleware)  //操作收藏之前必须检验是否登录
@@ -48,6 +53,9 @@ app.use('/user',userRouter)
 
 const captchaRouter=require('./router/captcha.js')
 app.use('/captcha',captchaRouter)
+
+const systemRouter=require('./router/system.js')
+app.use('/',systemRouter)
 
 app.use((err,req,res,next)=>{
 	// res.status(500)
